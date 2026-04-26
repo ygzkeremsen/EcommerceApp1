@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using Core;
 
-namespace Tests.UnitTests
+namespace Tests
 {
     public class OrderTests
     {
@@ -33,6 +33,31 @@ namespace Tests.UnitTests
             var result = service.ProcessPayment(100);
 
             Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void Payment_ShouldPass_ForZeroAmount()
+        {
+            var service = new OrderService();
+
+            var result = service.ProcessPayment(0);
+
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void FullOrderProcess_ShouldWork()
+        {
+            var cart = new Cart();
+            cart.AddProduct(new Product("Mouse", 100));
+
+            var service = new OrderService();
+
+            var order = service.PlaceOrder(cart);
+            var payment = service.ProcessPayment(cart.GetTotalPrice());
+
+            Assert.IsTrue(order);
+            Assert.IsTrue(payment);
         }
     }
 }
